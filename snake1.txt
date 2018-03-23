@@ -1,0 +1,49 @@
+;start north movement loop
+int 0x1
+cmp sens.n, 0
+je loopn
+cmp sens.w, 0
+je loopw
+loopn:
+mov mvmt.n, 1   ; move 1 into north
+mov mvmt.e, 0   ; move 0 into east
+mov mvmt.s, 0   ; move 0 into south
+mov mvmt.w, 0   ; move 0 into west
+int 0x2
+;check sense
+int 0x1
+;check north is clear
+cmp sens.n, 0   ; compare sens nibble 0 with 0
+je loopn
+;if not, try west
+cmp sens.w, 0
+je loopw
+loopw:
+mov mvmt.n, 0   ; move 1 into north
+mov mvmt.e, 0   ; move 0 into east
+mov mvmt.s, 0   ; move 0 into south
+mov mvmt.w, 1   ; move 0 into west
+int 0x2
+int 0x1
+cmp sens.w, 0
+je loopw
+;if not, try south
+loops:
+mov mvmt.n, 0   ; move 1 into north
+mov mvmt.e, 0   ; move 0 into east
+mov mvmt.s, 1   ; move 0 into south
+mov mvmt.w, 0   ; move 0 into west
+int 0x2
+int 0x1
+cmp sens.s, 0
+je loops
+;if not, try east
+loope:
+mov mvmt.n, 0   ; move 1 into north
+mov mvmt.e, 1   ; move 0 into east
+mov mvmt.s, 0   ; move 0 into south
+mov mvmt.w, 0   ; move 0 into west
+int 0x2
+int 0x1
+cmp sens.e, 0
+je loope
